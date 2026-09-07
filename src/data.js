@@ -283,7 +283,7 @@ export const PAYLOADS_DATA = [
 ];
 
 // ============================================
-// NEW PAYLOADS DATA (from user)
+// NEW PAYLOADS DATA
 // ============================================
 export const NEW_PAYLOADS_DATA = [
   {
@@ -583,19 +583,37 @@ export const PROVIDERS_DATA = [
 ];
 
 // ============================================
-// APPS (VPN, DEV, EXTRA)
+// APPS (VPN, DEV, EXTRA) - All Apps Merged
 // ============================================
+
+// VPN & Tunneling Apps (Old + New)
 export const APPS_VPN = [
+  // Old Apps
+  { name: "Bee Plus V2ray", version: "85.0.0", description: "V2Ray client with advanced routing and proxy capabilities. Supports multiple protocols.", url: "https://www.mediafire.com/file/i8u5nsh7dwg2514/Bee+Plus+V2ray_85.0.0.apk/file" },
+  { name: "TLS Tunnel", version: "8.1.0", description: "Secure TLS tunneling client for bypassing network restrictions.", url: "https://www.mediafire.com/file/6eebi3vz0p3ixs6/TLS+Tunnel_8.1.0.apk/file" },
+  { name: "Every Proxy Core", version: "0.1.0", description: "Lightweight proxy core with support for multiple proxy protocols.", url: "https://www.mediafire.com/file/vmus4wyims14533/Every+Proxy+Core_0.1.0.apk/file" },
+  { name: "SNI Checker", version: "1.6", description: "Utility to check and verify SNI (Server Name Indication) availability.", url: "https://www.mediafire.com/file/ccmi5jtucdwh72w/SNI+Checker_1.6.apk/file" },
+  { name: "Ultra Tunnel (No Ads)", version: "v49", description: "Ultra-fast tunneling app with ad-free experience.", url: "https://www.mediafire.com/file/cqonlwowe96vt54/Ultra___,_,_Tunnel_v49____@l4chan.apk/file" },
+  { name: "HTTP RIFFIX77 (No Ads)", version: "6.9.20-RC93", description: "HTTP injector with advanced features and no ads.", url: "https://www.mediafire.com/file/2fz2u3hr2dnskkk/HTTP+RIFFIX77_6.9.20-RC93.7z/file" },
+  { name: "HA Tunnel (No Ads)", version: "v5.2.1", description: "High-anonymity tunnel client with ad-free interface.", url: "https://www.mediafire.com/file/pgbbw01mzicdam3/H_A_Tunnel_@l4chanx_Crack_Done.apk/file" },
+  { name: "Handsome Fast (No Ads)", version: "1.8", description: "Fast and reliable tunnel with ad-free experience.", url: "https://www.mediafire.com/file/men2k7wok11r0a0/Handsome+Fast_1.8.apk/file" },
+  { name: "FNF TUNNEL BD (No Ads)", version: "PrinceBuild35", description: "Feature-rich tunnel client with no ads.", url: "https://www.mediafire.com/file/hvap7fuhqjzylki/FNF+TUNNEL+BD_PrinceBuild35.apk/file" },
+  // New Apps
   { name: "TLS Tunnel Pro", version: "8.4.0", description: "Advanced TLS tunneling client with enhanced security and performance.", url: "https://www.mediafire.com/file/gmq1nbsf23ebbj0/TLS+Tunnel_8.4.0[MOD]Patch[506]All_Device.apk/file" },
   { name: "HTTP Custom", version: "7.9.28", description: "Powerful HTTP injector and customizer for VPN and proxy configurations.", url: "https://www.mediafire.com/file/246pklaafzsca4d/HTTP_CUSTOM_7.9.28-Patch_1[MOD].apk/file" },
   { name: "OrNET TOR-GHOST", version: "1.0", description: "Dark web browser with integrated TOR and Ghost protocol support.", url: "https://www.mediafire.com/file/3pg0qan0u3557mi/OrNET_TOR-GHOST_DARKWEB_BROWSER[MOD].apk/file" },
   { name: "SKYN11XLAB", version: "1.0", description: "Comprehensive network toolkit with advanced scanning and tunneling features.", url: "https://www.mediafire.com/file/plajhgxwmnxokuf/SKYN11XLAB.apk/file" },
   { name: "Npv Tunnel", version: "123.1", description: "Lightweight and fast VPN tunnel with multiple protocol support.", url: "https://www.mediafire.com/file/bg6ownm9q3euswg/Npv+Tunnel_123.1-OLd_Version[MOD].apk/file" },
-  { name: "Bee Plus V2ray", version: "85.0", description: "V2Ray client with advanced routing and proxy capabilities.", url: "https://www.mediafire.com/file/imhzs1n07slr7qe/Bee+Plus+V2ray_85[up].apk/file" },
+  { name: "Bee Plus V2ray (New)", version: "85.0", description: "Updated V2Ray client with improved routing and proxy capabilities.", url: "https://www.mediafire.com/file/imhzs1n07slr7qe/Bee+Plus+V2ray_85[up].apk/file" },
   { name: "Guruz Tunnel", version: "14.4", description: "Versatile tunneling app supporting SSH, SSL, and WebSocket protocols.", url: "https://www.mediafire.com/file/pg1wmqezlrhcwiv/Guruz+Tunnel_14.4[MOD].apk/file" },
 ];
 
+// Development & Modding Tools (Old + New)
 export const APPS_DEV = [
+  // Old Dev Apps
+  { name: "MT Manager", version: "2.14.5-clone-MOD", description: "Advanced APK editor and manager with VIP features unlocked.", url: "https://www.mediafire.com/file/onbo1eedk0tcib1/MT+Manager___vip___@l4chan_2.14.5-clone-MOD-v6-xml-fix-final.apk/file", note: "Turn off internet before opening the app." },
+  { name: "NP Manager VIP", version: "v2.3.0", description: "Powerful APK and file manager with VIP features.", url: "https://t.me/xitsahmx77_0/589", note: "Turn off internet before opening the app." },
+  // New Dev Apps
   { name: "KernelSU Next", version: "1.0.2", description: "Next-generation kernel-based root solution for Android devices.", url: "https://www.mediafire.com/file/64pxf1r6p44c4d7/KernelSU+Next_v1.0.2-R13-53-g1a98d657.apk/file" },
   { name: "Spck NodeJS", version: "10.8.0", description: "Complete NodeJS development environment for mobile devices.", url: "https://www.mediafire.com/file/ahuw4trkqnaqmfz/Spck+NodeJS_10.8.0.0.apks/file" },
   { name: "Canta", version: "3.2.2", description: "Advanced package manager and debloater for Android.", url: "https://www.mediafire.com/file/ptsk718tsa7p9ps/Canta_3.2.2.apks/file" },
@@ -619,6 +637,7 @@ export const APPS_DEV = [
   { name: "Rodroid Il2cppDumper", version: "6.0", description: "Alternative Il2cpp dumper with additional features.", url: "https://www.mediafire.com/file/zpse4d8bluxqad4/Rodroid+Il2cppDumper_6.0.apk/file" },
 ];
 
+// Extra Apps (Old + New)
 export const APPS_EXTRA = [
   { name: "MicroG RE", version: "6.1.4", description: "Open-source reimplementation of Google Play Services.", url: "https://www.mediafire.com/file/9ezac5ho3d0yt86/MicroG+RE_6.1.4.apk/file" },
   { name: "YouTube ReVanced", version: "20.14.43", description: "Patched YouTube client with ad-blocking and advanced features.", url: "https://www.mediafire.com/file/ejuoz243u7ye9tm/YouTube+ReVanced_20.14.43.apk/file" },
