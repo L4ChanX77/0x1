@@ -1,31 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 const HCAPTCHA_SITEKEY = "5856f3e0-ee30-4a62-aaea-541c9976824a";
 
 export default function AgeVerify({ onVerify }) {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const captchaRef = useRef(null);
+  const containerRef = useRef(null);
   const widgetIdRef = useRef(null);
+  const isRenderedRef = useRef(false);
 
+  // تحميل سكربت hCaptcha
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://js.hcaptcha.com/1/api.js';
     script.async = true;
     script.defer = true;
+    script.onload = () => {
+      console.log('hCaptcha script loaded');
+      renderWidget();
+    };
     document.head.appendChild(script);
 
+    // دوال callback العامة
     window.onHCaptchaSuccess = (token) => {
-      console.log("hCaptcha Success Token:", token);
+      console.log('hCaptcha Success:', token);
       setIsCaptchaVerified(true);
       setIsVerifying(false);
     };
 
     window.onHCaptchaError = (error) => {
-      console.error("hCaptcha Error:", error);
+      console.error('hCaptcha Error:', error);
       setIsVerifying(false);
+    };
+
+    window.onHCaptchaExpired = () => {
+      console.warn('hCaptcha Expired');
+      setIsCaptchaVerified(false);
     };
 
     return () => {
@@ -33,49 +45,85 @@ export default function AgeVerify({ onVerify }) {
       scripts.forEach(s => s.remove());
       delete window.onHCaptchaSuccess;
       delete window.onHCaptchaError;
+      delete window.onHCaptchaExpired;
     };
   }, []);
 
-  const handleVerifyClick = () => {
-    if (!isCaptchaVerified) {
-      setIsVerifying(true);
-      if (window.hcaptcha) {
-        window.hcaptcha.execute(widgetIdRef.current);
-      } else {
-        alert("hCaptcha is loading, please wait.");
-        setIsVerifying(false);
-      }
-    } else {
-      onVerify();
+  // عرض الـ widget
+  const renderWidget = () => {
+    if (!window.hcaptcha || !containerRef.current || isRenderedRef.current) return;
+
+    try {
+      widgetIdRef.current = window.hcaptcha.render(containerRef.current, {
+        sitekey: HCAPTCHA_SITEKEY,
+        theme: 'dark',
+        size: 'normal',
+        callback: (token) => {
+          console.log('Captcha resolved:', token);
+          setIsCaptchaVerified(true);
+          setIsVerifying(false);
+        },
+        'error-callback': (error) => {
+          console.error('Captcha error:', error);
+          setIsVerifying(false);
+        },
+        'expired-callback': () => {
+          console.warn('Captcha expired');
+          setIsCaptchaVerified(false);
+        },
+      });
+      isRenderedRef.current = true;
+      console.log('hCaptcha rendered with ID:', widgetIdRef.current);
+    } catch (error) {
+      console.error('Failed to render hCaptcha:', error);
     }
   };
 
+  // محاولة عرض الويدجت عند تحميل المكون
   useEffect(() => {
-    const checkHCaptcha = setInterval(() => {
-      if (window.hcaptcha && captchaRef.current) {
-        widgetIdRef.current = window.hcaptcha.render(captchaRef.current, {
-          sitekey: HCAPTCHA_SITEKEY,
-          theme: 'dark',
-          callback: (token) => {
-            console.log("Captcha resolved:", token);
-            setIsCaptchaVerified(true);
-            setIsVerifying(false);
-          },
-          'error-callback': (error) => {
-            console.error("Captcha error:", error);
-            setIsVerifying(false);
-          },
-          'expired-callback': () => {
-            console.warn("Captcha expired, resetting.");
-            setIsCaptchaVerified(false);
-          }
-        });
-        clearInterval(checkHCaptcha);
+    const checkAndRender = () => {
+      if (window.hcaptcha && containerRef.current && !isRenderedRef.current) {
+        renderWidget();
+        return true;
       }
-    }, 100);
+      return false;
+    };
 
-    return () => clearInterval(checkHCaptcha);
+    if (!checkAndRender()) {
+      const interval = setInterval(() => {
+        if (checkAndRender()) {
+          clearInterval(interval);
+        }
+      }, 500);
+      setTimeout(() => clearInterval(interval), 10000);
+      return () => clearInterval(interval);
+    }
   }, []);
+
+  // دالة عند الضغط على الزر
+  const handleVerifyClick = () => {
+    if (isCaptchaVerified) {
+      onVerify();
+      return;
+    }
+
+    setIsVerifying(true);
+    if (window.hcaptcha && widgetIdRef.current !== null) {
+      try {
+        window.hcaptcha.execute(widgetIdRef.current);
+      } catch (error) {
+        console.error('Failed to execute hCaptcha:', error);
+        setIsVerifying(false);
+        isRenderedRef.current = false;
+        renderWidget();
+      }
+    } else {
+      isRenderedRef.current = false;
+      renderWidget();
+      setIsVerifying(false);
+      alert('Loading captcha, please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative bg-black z-50 px-4">
@@ -97,26 +145,22 @@ export default function AgeVerify({ onVerify }) {
           </p>
           
           <div className="w-full mb-6 flex justify-center">
-            <div 
-              ref={captchaRef} 
-              id="hcaptcha-container" 
-              className="h-captcha"
-              data-sitekey={HCAPTCHA_SITEKEY}
-              data-theme="dark"
-            ></div>
+            <div ref={containerRef} id="hcaptcha-container" className="h-captcha"></div>
           </div>
           
           <div className="flex flex-col w-full gap-3">
             <button
               onClick={handleVerifyClick}
-              disabled={isVerifying || !isCaptchaVerified}
+              disabled={!isCaptchaVerified && !isVerifying}
               className={`w-full py-3 font-mono uppercase tracking-wider font-bold rounded-sm transition-all ${
-                isCaptchaVerified 
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,0,68,0.3)]' 
+                isCaptchaVerified
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,0,68,0.3)] cursor-pointer'
+                  : isVerifying
+                  ? 'bg-primary/30 text-primary-foreground/70 cursor-wait'
                   : 'bg-primary/50 text-primary-foreground/70 cursor-not-allowed'
               }`}
             >
-              {isVerifying ? 'Verifying...' : isCaptchaVerified ? 'I AM 18+ / ACCEPT' : 'Verify Captcha First'}
+              {isVerifying ? 'Verifying...' : isCaptchaVerified ? 'I AM 18+ / ACCEPT' : 'VERIFY CAPTCHA FIRST'}
             </button>
             <button
               onClick={() => window.location.href = 'https://google.com'}
